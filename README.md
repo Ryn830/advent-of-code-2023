@@ -1,6 +1,14 @@
 ### Advent of Code 2023
 
-#### Debugging Setup
+#### Run Tests
+
+Utilizes Node's built in [test runner](https://nodejs.org/api/test.html) and [assertion library](https://nodejs.org/api/assert.html) (`node:test` & `node:assert`, respectively). Some summarized docs can be found [here](https://www.sonarsource.com/blog/node-js-test-runner/).
+
+```sh
+npm run day1
+```
+
+#### Debugging Setup (VSCode)
 
 - Install `tsx` globally
 
