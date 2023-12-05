@@ -6,7 +6,8 @@
   "scripts": {
     "all": "tsx ./**/solution.test.ts",
     "d1": "tsx ./day1/solution.test.ts",
-    "d2": "tsx ./day2/solution.test.ts"
+    "d2": "tsx ./day2/solution.test.ts",
+    "d3": "tsx ./day3/solution.test.ts"
   },
   "keywords": [],
   "author": "Ryan Yee",

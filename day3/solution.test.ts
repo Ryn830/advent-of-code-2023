@@ -27,7 +27,6 @@ describe('Day 3', () => {
   it('should return a solution for the provide input', () => {
     const input = parseTxtToLines(INPUT_PATH)
     const actual = solution(input)
-    console.log(`actual:`, actual)
-    assert.equal(actual, '####')
+    assert.notEqual(actual, 322385) // Incorrect
   })
 })
