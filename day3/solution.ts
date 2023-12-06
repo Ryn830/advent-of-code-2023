@@ -22,39 +22,50 @@
  *     if not move on to the next number
  */
 export const solution = (input: string[]): any => {
-  const positionsToCheck: Record<string, number[][]> = Object.entries(
-    findNumberPositions(input),
-  ).reduce((numbers, [number, positions]) => {
-    numbers[number] = positions
-      .map(([r, c]) => getParimeterIndicies(r, c))
-      .flat()
-      .filter(([r, c]) => isValidPosition(input, r, c))
-    return numbers
-  }, {})
+  const numberPositions = input
+    .map((line, row) => parseLineForNumbersWithPositions(row, line))
+    .flat()
 
-  const partNumbers = Object.entries(positionsToCheck)
+  const positionsToCheck: [number, number[][]][] = numberPositions.reduce<
+    [number, number[][]][]
+  >((numbers, [number, positions]) => {
+    return numbers.concat([
+      [
+        number,
+        positions
+          .map(([r, c]) => getParimeterIndicies(r, c))
+          .flat()
+          .filter(([r, c]) => isValidPosition(input, r, c)),
+      ],
+    ])
+  }, [])
+
+  const partNumbers = positionsToCheck
     .filter(([_, positions]) =>
       positions.some(position => positionContainsSymbol(input, position)),
     )
-    .reduce((sum, [number, _]) => sum + parseInt(number), 0)
+    .reduce((sum, [number, _]) => sum + number, 0)
 
   return partNumbers
 }
 
-function findNumberPositions(grid: string[]): Record<string, number[][]> {
-  return grid
-    .map((line, row) =>
-      line
-        .split(/\D/g)
-        .filter(l => l !== '')
-        .reduce((partIndices, value) => {
-          partIndices[value] = Array.from({ length: value.length }).map(
-            (_, y) => [row, line.indexOf(value) + y],
-          )
-          return partIndices
-        }, {}),
-    )
-    .reduce((all, row) => ({ ...all, ...row }), {})
+function parseLineForNumbersWithPositions(row: number, line: string) {
+  let i = 0
+  let current: [string, number[][]] = ['', []]
+  let result: [number, number[][]][] = []
+  while (i <= line.length) {
+    if (/\d/.test(line[i])) {
+      current[0] = current[0].length ? current[0] + line[i] : line[i]
+      current[1] = current[1].concat([[row, i]])
+    } else {
+      if (current[0].length) {
+        result = result.concat([[parseInt(current[0]), current[1]]])
+        current = ['', []]
+      }
+    }
+    i++
+  }
+  return result
 }
 
 function getParimeterIndicies(r: number, c: number) {
